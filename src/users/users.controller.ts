@@ -26,6 +26,12 @@ import {
 } from "../common/interceptor";
 import { IUser } from "./interfaces/user.interface";
 import { ApiUseTags, ApiResponse, ApiImplicitParam } from "@nestjs/swagger";
+/**
+ *
+ *
+ * @export
+ * @class UsersController
+ */
 @ApiUseTags("users")
 @Controller("users")
 @UseInterceptors(LoggingInterceptor)
@@ -34,6 +40,12 @@ import { ApiUseTags, ApiResponse, ApiImplicitParam } from "@nestjs/swagger";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  /**
+   *
+   *
+   * @returns {Promise<IUser[]>}
+   * @memberof UsersController
+   */
   @Get()
   findAll(): Promise<IUser[]> {
     return this.usersService.findAll();
