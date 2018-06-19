@@ -10,10 +10,11 @@ let timeoutJob = (t: number) => {
 
 @Injectable()
 export class TimeoutMiddleware implements NestMiddleware {
-  async resolve(t: number): MiddlewareFunction {
+  async resolve(t: number): Promise<MiddlewareFunction> {
     console.log(`[middleware:timeout] waiting ${t}s`);
     await timeoutJob(t);
     console.log("[middleware:timeout] prestart ...");
+
     return async (req, res, next) => {
       await timeoutJob(t / 4);
       console.log("[middleware:timeout] end ...");
