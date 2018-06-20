@@ -10,30 +10,30 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
-  NotImplementedException
-} from "@nestjs/common";
-import { UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
-import { UsersService } from "./users.service";
-import { CreateUserDto, UpdateUserDto } from "./dto";
-import { HttpExceptionFilter } from "../common/filters";
-import { ValidationPipe, ParseIntPipe } from "../common/pipe";
-import { RolesGuard } from "../common/guards";
-import { Roles } from "../common/decorator/roles.decorator";
+  NotImplementedException,
+} from '@nestjs/common';
+import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { HttpExceptionFilter } from '../common/filters';
+import { ValidationPipe, ParseIntPipe } from '../common/pipe';
+import { RolesGuard } from '../common/guards';
+import { Roles } from '../common/decorator/roles.decorator';
 import {
   LoggingInterceptor,
   TransformInterceptor,
-  ErrorsInterceptor
-} from "../common/interceptor";
-import { IUser } from "./interfaces/user.interface";
-import { ApiUseTags, ApiResponse, ApiImplicitParam } from "@nestjs/swagger";
+  ErrorsInterceptor,
+} from '../common/interceptor';
+import { IUser } from './interfaces/user.interface';
+import { ApiUseTags, ApiResponse, ApiImplicitParam } from '@nestjs/swagger';
 /**
  *
  *
  * @export
  * @class UsersController
  */
-@ApiUseTags("users")
-@Controller("users")
+@ApiUseTags('users')
+@Controller('users')
 @UseInterceptors(LoggingInterceptor)
 @UseInterceptors(TransformInterceptor)
 @UseGuards(RolesGuard)
@@ -51,20 +51,20 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(":id")
-  @Roles("admin")
+  @Get(':id')
+  @Roles('admin')
   @ApiImplicitParam({
-    name: "id",
-    description: "user id",
+    name: 'id',
+    description: 'user id',
     required: true,
-    type: String
+    type: String,
   })
   @ApiResponse({
     status: 200,
-    description: "The record has been successfully created"
+    description: 'The record has been successfully created',
   })
-  findOne(@Param("id") id): Promise<IUser> {
-    console.log("[controller:user]", id);
+  findOne(@Param('id') id): Promise<IUser> {
+    console.log('[controller:user]', id);
     return this.usersService.findOne(id);
   }
 
@@ -72,19 +72,19 @@ export class UsersController {
   @Post()
   create(
     @Body(new ValidationPipe())
-    createUserDto: CreateUserDto
+    createUserDto: CreateUserDto,
   ): Promise<IUser> {
-    console.log("[controller:user] create", createUserDto);
+    console.log('[controller:user] create', createUserDto);
     return this.usersService.create(createUserDto);
   }
 
-  @Put(":id")
+  @Put(':id')
   update(
-    @Param("id") id,
+    @Param('id') id,
     @Body(new ValidationPipe())
-    updateUserDto: UpdateUserDto
+    updateUserDto: UpdateUserDto,
   ): Promise<{}> {
-    console.log("[controller:user] update", id, updateUserDto);
+    console.log('[controller:user] update', id, updateUserDto);
     return this.usersService.update(id, updateUserDto);
   }
 
@@ -94,9 +94,9 @@ export class UsersController {
     throw new NotImplementedException();
   }
 
-  @Delete(":id")
+  @Delete(':id')
   // @UseInterceptors(ErrorsInterceptor)
-  delete(@Param("id") id): Promise<{}> {
+  delete(@Param('id') id): Promise<{}> {
     // response 'internal server error'
     // throw new Error('Not implemented')
     return this.usersService.delete(id);

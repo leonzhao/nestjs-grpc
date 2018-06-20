@@ -1,2 +1,2 @@
-export * from "./logger.middleware";
-export * from "./timeout.middleware";
+export * from './logger.middleware';
+export * from './timeout.middleware';

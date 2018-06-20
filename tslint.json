@@ -15,6 +15,7 @@
         ],
         "object-literal-sort-keys": false,
         "no-implicit-dependencies": true,
-        "no-unused-variable": true
+        "no-unused-variable": true,
+        "quotemark": [true, "single", "jsx-double"]
     }
 }
