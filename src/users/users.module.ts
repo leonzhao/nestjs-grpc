@@ -10,10 +10,14 @@ import { UsersService } from './users.service';
 import { TimeoutMiddleware } from '../common/middleware';
 import { UserSchema } from './schemas/user.schema';
 import { DatabaseModule } from '../database/database.module';
+import { usersProviders } from './users.providers'
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
+  imports: [
+    // MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])
+    DatabaseModule
+  ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, ...usersProviders],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
