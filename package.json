@@ -78,5 +78,8 @@
   "extends": [
     "tslint:latest",
     "tslint-config-prettier"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "http://registry.chainexcloud.net/registry/npm-private/"
+  }
 }
