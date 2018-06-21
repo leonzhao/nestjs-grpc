@@ -11,6 +11,9 @@ import {
   HttpException,
   HttpStatus,
   NotImplementedException,
+  Logger,
+  Query,
+  Inject
 } from '@nestjs/common';
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -26,6 +29,8 @@ import {
 } from '../common/interceptor';
 import { IUser } from './interfaces/user.interface';
 import { ApiUseTags, ApiResponse, ApiImplicitParam } from '@nestjs/swagger';
+import { SHARED_VALUE_PROVIDER } from '../constants';
+import { SharedClass } from '../shared/shared.providers'
 /**
  *
  *
@@ -38,7 +43,12 @@ import { ApiUseTags, ApiResponse, ApiImplicitParam } from '@nestjs/swagger';
 @UseInterceptors(TransformInterceptor)
 @UseGuards(RolesGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly logger: Logger = new Logger(UsersController.name)
+  constructor(
+    private readonly usersService: UsersService, 
+    @Inject(SHARED_VALUE_PROVIDER) private sharedValue: string,
+    private readonly sharedClass: SharedClass
+  ) {}
 
   /**
    *
@@ -49,6 +59,15 @@ export class UsersController {
   @Get()
   findAll(): Promise<IUser[]> {
     return this.usersService.findAll();
+  }
+
+  @Get('/shared')
+  getShared() {
+    return {
+      value: 'value',
+      class: this.sharedClass.getEnv()
+
+    }
   }
 
   @Get(':id')
@@ -63,8 +82,9 @@ export class UsersController {
     status: 200,
     description: 'The record has been successfully created',
   })
-  findOne(@Param('id') id): Promise<IUser> {
-    console.log('[controller:user]', id);
+  findOne(@Param('id') id, @Query('space') space): Promise<IUser> {
+    this.logger.log(`${id} space: ${space}`);
+    this.logger.log(`shared value: ${this.sharedValue}`)
     return this.usersService.findOne(id);
   }
 
@@ -74,7 +94,7 @@ export class UsersController {
     @Body(new ValidationPipe())
     createUserDto: CreateUserDto,
   ): Promise<IUser> {
-    console.log('[controller:user] create', createUserDto);
+    // this.logger.log('[controller:user] create')//, createUserDto);
     return this.usersService.create(createUserDto);
   }
 
@@ -84,7 +104,7 @@ export class UsersController {
     @Body(new ValidationPipe())
     updateUserDto: UpdateUserDto,
   ): Promise<{}> {
-    console.log('[controller:user] update', id, updateUserDto);
+    this.logger.log(`${this.update.name} ${arguments}`);
     return this.usersService.update(id, updateUserDto);
   }
 
@@ -101,4 +121,5 @@ export class UsersController {
     // throw new Error('Not implemented')
     return this.usersService.delete(id);
   }
+
 }
