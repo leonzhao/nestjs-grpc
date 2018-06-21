@@ -1,35 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import Eureka from 'eureka-js-client' 
+import { grpcClientOptions } from './grpc-hero.options';
 // const Eureka = require('eureka-js-client').Eureka;
 
+const serverPort  = 5001 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const options = new DocumentBuilder()
-    .setTitle('Users example')
-    .setDescription('The users API description')
-    .setVersion('1.0.0')
-    .addTag('users')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api/v1', app, document);
+  app.connectMicroservice(grpcClientOptions);
+  await app.startAllMicroservicesAsync();
 
   const eurekaClient = new Eureka({
     instance: {
-      instanceId: 'nestjsService',
-      app: 'nestjsService',
-      hostName: 'localhost',
+      // instanceId: 'nestjsService',
+      app: 'nestjs-demo-grpc',
+      hostName: 'leonzhao',
       ipAddr: '192.168.0.153',
-      statusPageUrl: 'http://192.168.0.153:4000/info',
-      healthCheckUrl: 'http://192.168.0.153:4000/health',
+      statusPageUrl: `http://192.168.0.153:${serverPort}/info`,
+      healthCheckUrl: `http://192.168.0.153:${serverPort}/health`,
       port: {
-        '$': 4000,
+        '$': serverPort,
         '@enabled': true
       },
-      vipAddress: 'nestjsService',
+      vipAddress: 'test.nestjs.org',
       dataCenterInfo: {
         '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
         name: 'MyOwn'
@@ -43,9 +36,7 @@ async function bootstrap() {
       servicePath: '/eureka/apps/'
       // serviceUrl: 'http://192.168.0.47:8000/eureka/apps/'
     },
-  })
-
-  eurekaClient.start((data) => console.log(data))
-  await app.listen(4000);
+  }) 
+  // eurekaClient.start()
 }
 bootstrap();
