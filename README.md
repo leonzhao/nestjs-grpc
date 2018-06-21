@@ -1,8 +1,8 @@
-# Nestjs App Demo
+# Nestjs GRPC Server Demo
 
 ## Description
 
-nestjs app demo 
+nestjs grpc server demo 
 
 ## Installation
 
