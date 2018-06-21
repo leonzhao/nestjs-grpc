@@ -28,6 +28,7 @@
     "@nestjs/websockets": "^5.0.0",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.5",
+    "eureka-js-client": "^4.4.1",
     "fastify-formbody": "^2.0.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.5",
